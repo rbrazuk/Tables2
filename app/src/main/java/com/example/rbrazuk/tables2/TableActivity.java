@@ -99,6 +99,7 @@ public class TableActivity extends AppCompatActivity {
     private Team[] parseJsonTeam(String json) throws JSONException {
         JSONObject table = new JSONObject(json);
         JSONArray standing = table.getJSONArray("standing");
+        //String url = table.getJSONObject("_links").getJSONObject("team").getString("href");
 
         System.out.println(standing.length());
 
@@ -106,12 +107,14 @@ public class TableActivity extends AppCompatActivity {
 
         for (int i = 0; i < standing.length(); i++) {
             JSONObject jsonTeam = standing.getJSONObject(i);
+            String url = jsonTeam.getJSONObject("_links").getJSONObject("team").getString("href");
             Team team = new Team();
 
             team.setTeamName(jsonTeam.getString("teamName"));
             team.setPosition(jsonTeam.getInt("position"));
             team.setGoalDifference(jsonTeam.getInt("goalDifference"));
             team.setPoints(jsonTeam.getInt("points"));
+            team.setUrl(url);
 
             mTeams[i] = team;
 

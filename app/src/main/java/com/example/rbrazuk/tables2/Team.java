@@ -8,6 +8,11 @@ public class Team {
     private int goalDifference;
     private int points;
 
+    private String url;
+    private int wins;
+    private int draws;
+    private int losses;
+
     public int getPosition() {
         return position;
     }
@@ -38,5 +43,37 @@ public class Team {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public void setDraws(int draws) {
+        this.draws = draws;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
     }
 }
