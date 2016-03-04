@@ -73,6 +73,9 @@ public class TableActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             getSupportActionBar().setTitle(leagueName);
+                            TableAdapter adapter = new TableAdapter(getApplicationContext(),mTeams);
+                            mListView.setAdapter(adapter);
+
                         }
                     });
 
