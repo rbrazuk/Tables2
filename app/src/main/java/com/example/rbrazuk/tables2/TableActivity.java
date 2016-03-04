@@ -27,6 +27,7 @@ public class TableActivity extends AppCompatActivity {
 
     private Team[] mTeams;
     private String leagueName;
+    private String leagueId;
 
     @Bind(R.id.lv_table) ListView mListView;
 
@@ -44,14 +45,13 @@ public class TableActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String leagueId = intent.getStringExtra(MainActivity.TAG);
+        leagueId = intent.getStringExtra(MainActivity.TAG);
 
         String tableUrl = "http://api.football-data.org/v1/soccerseasons/" + leagueId + "/leagueTable";
 
         System.out.println(tableUrl);
 
         OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
 
         Request request = new Request.Builder().url(tableUrl).addHeader("X-Auth-Token","95468454664049ca81f3fc478ede7ef2").build();
 
@@ -81,9 +81,9 @@ public class TableActivity extends AppCompatActivity {
                             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Intent intent = new Intent(TableActivity.this,TeamDetail.class);
+                                    Intent intent = new Intent(TableActivity.this, TeamDetail.class);
                                     Team parcelableTeam = (Team) parent.getItemAtPosition(position);
-                                    intent.putExtra("team",parcelableTeam);
+                                    intent.putExtra("team", parcelableTeam);
                                     startActivity(intent);
                                 }
                             });
@@ -101,6 +101,21 @@ public class TableActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("leagueId", leagueId);
+        System.out.println("added " + leagueId + " to bundle");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        leagueId = savedInstanceState.getString("leagueId");
+    }
+
+
+
     private String getLeagueName(String json) throws JSONException {
         JSONObject table = new JSONObject(json);
         String seasonName = table.getString("leagueCaption");
@@ -111,7 +126,6 @@ public class TableActivity extends AppCompatActivity {
     private Team[] parseJsonTeam(String json) throws JSONException {
         JSONObject table = new JSONObject(json);
         JSONArray standing = table.getJSONArray("standing");
-        //String url = table.getJSONObject("_links").getJSONObject("team").getString("href");
 
         System.out.println(standing.length());
 

@@ -24,7 +24,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
-        <activity android:name=".TeamDetail">
+        <activity android:name=".TeamDetail"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TableActivity"/>
         </activity>
     </application>
 
