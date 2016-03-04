@@ -3,6 +3,8 @@ package com.example.rbrazuk.tables2;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -76,6 +78,16 @@ public class TableActivity extends AppCompatActivity {
                             TableAdapter adapter = new TableAdapter(getApplicationContext(),mTeams);
                             mListView.setAdapter(adapter);
 
+                            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(TableActivity.this,TeamDetail.class);
+                                    Team parcelableTeam = (Team) parent.getItemAtPosition(position);
+                                    intent.putExtra("team",parcelableTeam);
+                                    startActivity(intent);
+                                }
+                            });
+
                         }
                     });
 
@@ -114,6 +126,9 @@ public class TableActivity extends AppCompatActivity {
             team.setPosition(jsonTeam.getInt("position"));
             team.setGoalDifference(jsonTeam.getInt("goalDifference"));
             team.setPoints(jsonTeam.getInt("points"));
+            team.setWins(jsonTeam.getInt("wins"));
+            team.setDraws(jsonTeam.getInt("draws"));
+            team.setLosses(jsonTeam.getInt("losses"));
             team.setUrl(url);
 
             mTeams[i] = team;

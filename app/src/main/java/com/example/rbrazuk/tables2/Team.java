@@ -1,7 +1,10 @@
 package com.example.rbrazuk.tables2;
 
 
-public class Team {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Team implements Parcelable {
 
     private int position;
     private String teamName;
@@ -76,4 +79,45 @@ public class Team {
     public void setLosses(int losses) {
         this.losses = losses;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.position);
+        dest.writeString(this.teamName);
+        dest.writeInt(this.goalDifference);
+        dest.writeInt(this.points);
+        dest.writeString(this.url);
+        dest.writeInt(this.wins);
+        dest.writeInt(this.draws);
+        dest.writeInt(this.losses);
+    }
+
+    public Team() {
+    }
+
+    protected Team(Parcel in) {
+        this.position = in.readInt();
+        this.teamName = in.readString();
+        this.goalDifference = in.readInt();
+        this.points = in.readInt();
+        this.url = in.readString();
+        this.wins = in.readInt();
+        this.draws = in.readInt();
+        this.losses = in.readInt();
+    }
+
+    public static final Creator<Team> CREATOR = new Creator<Team>() {
+        public Team createFromParcel(Parcel source) {
+            return new Team(source);
+        }
+
+        public Team[] newArray(int size) {
+            return new Team[size];
+        }
+    };
 }
