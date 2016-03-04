@@ -96,9 +96,6 @@ public class TableActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     @Override
@@ -137,6 +134,7 @@ public class TableActivity extends AppCompatActivity {
             Team team = new Team();
 
             team.setTeamName(jsonTeam.getString("teamName"));
+            team.setCrestUrl(jsonTeam.getString("crestURI"));
             team.setPosition(jsonTeam.getInt("position"));
             team.setGoalDifference(jsonTeam.getInt("goalDifference"));
             team.setPoints(jsonTeam.getInt("points"));

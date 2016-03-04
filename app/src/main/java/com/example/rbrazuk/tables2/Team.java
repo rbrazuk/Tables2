@@ -15,6 +15,7 @@ public class Team implements Parcelable {
     private int wins;
     private int draws;
     private int losses;
+    private String crestUrl;
 
     public int getPosition() {
         return position;
@@ -80,6 +81,14 @@ public class Team implements Parcelable {
         this.losses = losses;
     }
 
+    public String getCrestUrl() {
+        return crestUrl;
+    }
+
+    public void setCrestUrl(String crestUrl) {
+        this.crestUrl = crestUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -95,6 +104,7 @@ public class Team implements Parcelable {
         dest.writeInt(this.wins);
         dest.writeInt(this.draws);
         dest.writeInt(this.losses);
+        dest.writeString(this.crestUrl);
     }
 
     public Team() {
@@ -109,6 +119,7 @@ public class Team implements Parcelable {
         this.wins = in.readInt();
         this.draws = in.readInt();
         this.losses = in.readInt();
+        this.crestUrl = in.readString();
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>() {
