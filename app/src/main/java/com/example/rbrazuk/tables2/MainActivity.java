@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -50,34 +51,38 @@ public class MainActivity extends AppCompatActivity {
         mLeaguesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(parent.getItemAtPosition(position));
+                if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, "Please check network connection", Toast.LENGTH_LONG).show();
+                } else {
+                    System.out.println(parent.getItemAtPosition(position));
 
-                Intent intent = new Intent(MainActivity.this, TableActivity.class);
-                switch (position) {
-                    case 0:
-                        intent.putExtra(TAG, PREMIER_LEAGUE_ID);
-                        break;
-                    case 1:
-                        intent.putExtra(TAG,BUNDESLIGA_ID);
-                        break;
-                    case 2:
-                        intent.putExtra(TAG,LIGUE_1_ID);
-                        break;
-                    case 3:
-                        intent.putExtra(TAG,LA_LIGA_ID);
-                        break;
-                    case 4:
-                        intent.putExtra(TAG,SERIE_A_ID);
-                        break;
-                    case 5:
-                        intent.putExtra(TAG,EREDIVISIE_ID);
-                        break;
-                    default:
-                        break;
+                    Intent intent = new Intent(MainActivity.this, TableActivity.class);
+                    switch (position) {
+                        case 0:
+                            intent.putExtra(TAG, PREMIER_LEAGUE_ID);
+                            break;
+                        case 1:
+                            intent.putExtra(TAG,BUNDESLIGA_ID);
+                            break;
+                        case 2:
+                            intent.putExtra(TAG,LIGUE_1_ID);
+                            break;
+                        case 3:
+                            intent.putExtra(TAG,LA_LIGA_ID);
+                            break;
+                        case 4:
+                            intent.putExtra(TAG,SERIE_A_ID);
+                            break;
+                        case 5:
+                            intent.putExtra(TAG,EREDIVISIE_ID);
+                            break;
+                        default:
+                            break;
 
 
+                    }
+                    startActivity(intent);
                 }
-                startActivity(intent);
             }
         });
 

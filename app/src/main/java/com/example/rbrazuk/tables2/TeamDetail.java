@@ -1,21 +1,31 @@
 package com.example.rbrazuk.tables2;
 
-import android.graphics.Bitmap;
-import android.support.v4.app.NavUtils;
+
+import android.graphics.drawable.PictureDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class TeamDetail extends AppCompatActivity {
 
@@ -37,13 +47,34 @@ public class TeamDetail extends AppCompatActivity {
         getSupportActionBar().setTitle(team.getTeamName());
 
         String crestUrl = team.getCrestUrl();
-        System.out.println(crestUrl);
+
+        Log.d("TeamDetail", "image url: " + crestUrl);
 
         String wins = team.getWins() + "";
         String draws = team.getDraws() + "";
         String losses = team.getLosses() + "";
 
-        Glide.with(this).load(crestUrl).into(mTeamCrest);
+        Log.d("TeamDetail","team URL: " + team.getUrl());
+
+        /*try {
+            SVG svg = SVG.(crestUrl);
+            Log.d("TeamDetail", "svg: " + svg.toString());
+        } catch (SVGParseException e) {
+            Log.e("TeamDetail", e.getMessage());
+        }*/
+
+        Glide.with(this).load(Uri.parse(crestUrl)).into(mTeamCrest);
+        //Picasso.with(this).load(crestUrl).into(mTeamCrest);
+
+        /*if(crestUrl.contains(".png")) {
+            Glide.with(this).load(Uri.parse(crestUrl)).into(mTeamCrest);
+        } else {
+
+
+
+        }*/
+
+
 
 
 
@@ -52,7 +83,7 @@ public class TeamDetail extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // This is the up button
+
             case android.R.id.home:
                 this.finish();
                 return true;
@@ -60,6 +91,8 @@ public class TeamDetail extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
 
 

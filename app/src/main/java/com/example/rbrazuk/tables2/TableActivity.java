@@ -3,6 +3,7 @@ package com.example.rbrazuk.tables2;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -31,7 +32,6 @@ public class TableActivity extends AppCompatActivity {
 
     @Bind(R.id.lv_table) ListView mListView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +40,17 @@ public class TableActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
+        if (getIntent() != null) {
+            leagueId = getIntent().getStringExtra(MainActivity.TAG);
+        } else {
+            finish();
+        }
 
-        leagueId = intent.getStringExtra(MainActivity.TAG);
+
 
         String tableUrl = "http://api.football-data.org/v1/soccerseasons/" + leagueId + "/leagueTable";
-
-        System.out.println(tableUrl);
 
         OkHttpClient client = new OkHttpClient();
 
@@ -65,34 +66,38 @@ public class TableActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 String jsonData = response.body().string();
-                System.out.println(jsonData);
 
-                try {
-                    mTeams = parseJsonTeam(jsonData);
-                    leagueName = getLeagueName(jsonData);
+                if (!TextUtils.isEmpty(jsonData)) {
+                    System.out.println(jsonData);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getSupportActionBar().setTitle(leagueName);
-                            TableAdapter adapter = new TableAdapter(getApplicationContext(),mTeams);
-                            mListView.setAdapter(adapter);
+                    try {
+                        mTeams = parseJsonTeam(jsonData);
+                        leagueName = getLeagueName(jsonData);
 
-                            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Intent intent = new Intent(TableActivity.this, TeamDetail.class);
-                                    Team parcelableTeam = (Team) parent.getItemAtPosition(position);
-                                    intent.putExtra("team", parcelableTeam);
-                                    startActivity(intent);
-                                }
-                            });
 
-                        }
-                    });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getSupportActionBar().setTitle(leagueName);
+                                TableAdapter adapter = new TableAdapter(getApplicationContext(),mTeams);
+                                mListView.setAdapter(adapter);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Intent intent = new Intent(TableActivity.this, TeamDetail.class);
+                                        Team parcelableTeam = (Team) parent.getItemAtPosition(position);
+                                        intent.putExtra("team", parcelableTeam);
+                                        startActivity(intent);
+                                    }
+                                });
+
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -110,8 +115,6 @@ public class TableActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         leagueId = savedInstanceState.getString("leagueId");
     }
-
-
 
     private String getLeagueName(String json) throws JSONException {
         JSONObject table = new JSONObject(json);
@@ -144,11 +147,8 @@ public class TableActivity extends AppCompatActivity {
             team.setUrl(url);
 
             mTeams[i] = team;
-
         }
 
         return mTeams;
     }
-
-    
 }
